@@ -1,14 +1,14 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { NextAuthOptions } from "next-auth"
-import EmailProvider from "next-auth/providers/email"
+// import EmailProvider from "next-auth/providers/email"
 import GitHubProvider from "next-auth/providers/github"
-import { Client } from "postmark"
+// import { Client } from "postmark"
 
 import { env } from "@/env.mjs"
-import { siteConfig } from "@/config/site"
+// import { siteConfig } from "@/config/site"
 import { db } from "@/lib/db"
 
-const postmarkClient = new Client(env.POSTMARK_API_TOKEN)
+// const postmarkClient = new Client(env.POSTMARK_API_TOKEN)
 
 export const authOptions: NextAuthOptions = {
   // huh any! I know.
@@ -27,56 +27,56 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
 
-    EmailProvider({
-      server: {
-        host: env.SMTP_HOST,
-        port: Number(env.SMTP_PORT),
-        auth: {
-          user: env.SMTP_USER,
-          pass: env.SMTP_PASSWORD,
-        },
-      },
-      from: env.SMTP_FROM,
-      sendVerificationRequest: async ({ identifier, url, provider }) => {
-        const user = await db?.user?.findUnique({
-          where: {
-            email: identifier,
-          },
-          select: {
-            emailVerified: true,
-          },
-        })
+    // EmailProvider({
+    //   server: {
+    //     host: env.SMTP_HOST,
+    //     port: Number(env.SMTP_PORT),
+    //     auth: {
+    //       user: env.SMTP_USER,
+    //       pass: env.SMTP_PASSWORD,
+    //     },
+    //   },
+    //   from: env.SMTP_FROM,
+    //   sendVerificationRequest: async ({ identifier, url, provider }) => {
+    //     const user = await db?.user?.findUnique({
+    //       where: {
+    //         email: identifier,
+    //       },
+    //       select: {
+    //         emailVerified: true,
+    //       },
+    //     })
 
-        const templateId = user?.emailVerified
-          ? env.POSTMARK_SIGN_IN_TEMPLATE
-          : env.POSTMARK_ACTIVATION_TEMPLATE
-        if (!templateId) {
-          throw new Error("Missing template id")
-        }
+    //     const templateId = user?.emailVerified
+    //       ? env.POSTMARK_SIGN_IN_TEMPLATE
+    //       : env.POSTMARK_ACTIVATION_TEMPLATE
+    //     if (!templateId) {
+    //       throw new Error("Missing template id")
+    //     }
 
-        const result = await postmarkClient.sendEmailWithTemplate({
-          TemplateId: parseInt(templateId),
-          To: identifier,
-          From: provider.from as string,
-          TemplateModel: {
-            action_url: url,
-            product_name: siteConfig.short_name,
-          },
-          Headers: [
-            {
-              // Set this to prevent Gmail from threading emails.
-              // See https://stackoverflow.com/questions/23434110/force-emails-not-to-be-grouped-into-conversations/25435722.
-              Name: "X-Entity-Ref-ID",
-              Value: new Date().getTime() + "",
-            },
-          ],
-        })
+    //     const result = await postmarkClient.sendEmailWithTemplate({
+    //       TemplateId: parseInt(templateId),
+    //       To: identifier,
+    //       From: provider.from as string,
+    //       TemplateModel: {
+    //         action_url: url,
+    //         product_name: siteConfig.short_name,
+    //       },
+    //       Headers: [
+    //         {
+    //           // Set this to prevent Gmail from threading emails.
+    //           // See https://stackoverflow.com/questions/23434110/force-emails-not-to-be-grouped-into-conversations/25435722.
+    //           Name: "X-Entity-Ref-ID",
+    //           Value: new Date().getTime() + "",
+    //         },
+    //       ],
+  //       })
 
-        if (result.ErrorCode) {
-          throw new Error(result.Message)
-        }
-      },
-    }),
+  //       if (result.ErrorCode) {
+  //         throw new Error(result.Message)
+  //       }
+  //     },
+  //   }),
   ],
   secret: env.NEXTAUTH_SECRET,
   callbacks: {
@@ -99,7 +99,7 @@ export const authOptions: NextAuthOptions = {
 
       if (!dbUser) {
         if (user) {
-          token.id = user?.id
+          token.id = user.id
         }
         return token
       }

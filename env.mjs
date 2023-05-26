@@ -3,26 +3,13 @@ import { z } from "zod"
 
 export const env = createEnv({
   server: {
-    UNSPLASH_ACCESS_KEY: z.string().min(1),
     OPENAI_API_KEY: z.string().min(1),
-    RAPID_API_KEY: z.string().min(1).optional(),
     DATABASE_URL: z.string().min(1),
     GITHUB_CLIENT_ID: z.string().min(1),
     GITHUB_CLIENT_SECRET: z.string().min(1),
-    SMTP_FROM: z.string().min(1),
-    SMTP_HOST: z.string().min(1),
-    SMTP_PORT: z.string().min(1),
-    SMTP_USER: z.string().min(1),
-    SMTP_PASSWORD: z.string().min(1),
-    POSTMARK_API_TOKEN: z.string().min(1),
-    POSTMARK_SIGN_IN_TEMPLATE: z.string().min(1),
-    POSTMARK_ACTIVATION_TEMPLATE: z.string().min(1),
     NEXTAUTH_URL: z.string().url().optional(),
     NEXTAUTH_SECRET: z.string().min(1),
-    STRIPE_API_KEY: z.string().min(1),
-    STRIPE_WEBHOOK_SECRET: z.string().min(1),
-    STRIPE_PRO_MONTHLY_PLAN_ID: z.string().min(1),
-    DATABASE_URL: z.string().min(1),
+
   },
   client: {
     NEXT_PUBLIC_GITHUB_ACCESS_TOKEN: z.string().min(1).optional(),

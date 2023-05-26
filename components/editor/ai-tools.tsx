@@ -41,6 +41,7 @@ function AITools() {
   const getLanguages = async () => {
     const languages = await listLanguages()
     setWorldLanguages(languages!)
+    
   }
 
   useEffect(() => {
@@ -283,7 +284,7 @@ function AITools() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <div className="h-[400px] w-fit overflow-y-scroll">
-              {worldlanguages.map(
+              {Object.values(worldlanguages).map(
                 (
                   language: {
                     name: string
